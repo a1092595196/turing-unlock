@@ -1,0 +1,2 @@
+# Pinned NVIDIA GSP firmware is a device image, not a host ELF program.
+turing-unlock-firmware: arch-independent-package-contains-binary-or-object [usr/lib/firmware/turing-unlock/610.43.03/gsp_tu10x.bin]

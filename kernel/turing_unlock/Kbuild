@@ -1,0 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-only
+obj-m += turing_unlock.o
+turing_unlock-y := main.o gfw_eval.o prep.o layout.o \
+	vbios.o boot.o unlock.o

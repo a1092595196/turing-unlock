@@ -1,0 +1,5 @@
+turing-unlock (2.0.0) UNRELEASED; urgency=medium
+
+  * TU102-only split of the pre-driver unlock.
+
+ -- NaLan ZeYu <nalanzeyu@gmail.com>  Sat, 24 Oct 2026 21:00:00 +0800
