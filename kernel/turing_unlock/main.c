@@ -12,15 +12,19 @@ static char *targets;
 module_param(targets, charp, 0444);
 MODULE_PARM_DESC(targets, "\"all\" or comma-separated PCI addresses of supported cards to unlock");
 
-/* TU102 GPU functions in pci.ids, excluding audio functions. Only the Dell
- * RTX 2080 Ti 22GB (10de:1e07) has been validated.
- */
 static const unsigned short supported_ids[] = {
-	0x1e07,
+	/* TU102 */
+	0x1e03, 0x1e04, 0x1e07, 0x1e2d, 0x1e2e,
+	/* TU104 (not tested) */
+	0x1e81, 0x1e82, 0x1e84, 0x1e87, 0x1e89,
+	/* TU104 (not tested) */
+	0x1ec2, 0x1ec7,
+	/* TU106 (not tested) */
+	0x1f02, 0x1f03, 0x1f06, 0x1f07, 0x1f08, 0x1f42, 0x1f47,
 };
 
 static ASYNC_DOMAIN_EXCLUSIVE(unlock_domain);
-static DEFINE_MUTEX(tu102_lock);
+static DEFINE_MUTEX(turing_lock);
 
 /* The next supported NVIDIA card after from, like pci_get_device(). */
 static struct pci_dev *next_supported(struct pci_dev *from)
@@ -45,10 +49,9 @@ static void unlock_one(void *data, async_cookie_t cookie)
 	if (pdev->driver) {
 		ret = -EBUSY;
 	} else {
-		/* TU102 transactions are serialized. */
-		mutex_lock(&tu102_lock);
+		mutex_lock(&turing_lock);
 		ret = turing_unlock_card(pdev);
-		mutex_unlock(&tu102_lock);
+		mutex_unlock(&turing_lock);
 	}
 	pci_dev_unlock(pdev);
 	if (ret)
@@ -86,7 +89,7 @@ static void report_unmatched(void)
 		if (pdev)
 			pci_dev_put(pdev);
 		else
-			pr_err("turing_unlock: no TU102 card at \"%.*s\"\n",
+			pr_err("turing_unlock: no supported card at \"%.*s\"\n",
 			       (int)(end - entry), entry);
 	}
 }
