@@ -5,7 +5,7 @@
 pkgbase=turing-unlock
 pkgname=(turing-unlock-dkms turing-unlock-firmware)
 pkgver=2.0.0
-pkgrel=1
+pkgrel=2
 _nv=610.43.03
 _utils=nvidia-utils-$_nv-1-x86_64_v3.pkg.tar.zst
 pkgdesc='Unlock full speed FP16 tensor core before the NVIDIA driver loads'
