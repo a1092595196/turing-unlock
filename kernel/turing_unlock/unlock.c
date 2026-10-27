@@ -748,8 +748,12 @@ int turing_unlock_card(struct pci_dev *pdev)
 			goto out;
 		vga_reg = rd(w, 0x625f04);
 		if (bad(vga_reg)) {
-			ret = GU_DIAG(-EIO);
-			goto out;
+			/* Headless CMP40HX (TU106, display fuse off): PDISP reads back
+			 * badf. The official driver (kgspPopulateWprMeta_TU102) falls back
+			 * to vgaWorkspaceOffset = fbSize - PRAMIN(1MB) in that case; do
+			 * the same via the default vga_base = fb_bytes - 1MB below. */
+			GU_NOTE("vga workspace bad (%#x): headless card, fb-1MB fallback\n", vga_reg);
+			vga_reg = 0;
 		}
 		mag = (range_reg >> 4) & 0x3fu;
 		scale = range_reg & 0xfu;
