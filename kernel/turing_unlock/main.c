@@ -21,6 +21,7 @@ static const unsigned short supported_ids[] = {
 	0x1ec2, 0x1ec7,
 	/* TU106 (not tested) */
 	0x1f02, 0x1f03, 0x1f06, 0x1f07, 0x1f08, 0x1f42, 0x1f47,
+	0x1f0b, /* NVIDIA CMP 40 (CMP40HX) */
 };
 
 static ASYNC_DOMAIN_EXCLUSIVE(unlock_domain);
