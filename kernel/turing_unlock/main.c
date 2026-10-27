@@ -99,6 +99,7 @@ static int __init turing_unlock_init(void)
 {
 	struct pci_dev *pdev = NULL;
 	bool all;
+	int n;
 
 	/* Loaded ahead of nvidia on every boot; the command line is the opt-in. */
 	if (!targets || !*targets)
@@ -106,11 +107,15 @@ static int __init turing_unlock_init(void)
 	all = !strcmp(targets, "all");
 	if (!all)
 		report_unmatched();
+	n = 0;
 	while ((pdev = next_supported(pdev))) {
 		if (!all && !listed(pci_name(pdev)))
 			continue;
+		n++;
 		async_schedule_domain(unlock_one, pci_dev_get(pdev), &unlock_domain);
 	}
+	if (!n)
+		pr_err("turing_unlock: no supported card found\n");
 	/* nvidia loads once this returns: every card must be finished by then. */
 	async_synchronize_full_domain(&unlock_domain);
 	return 0;
